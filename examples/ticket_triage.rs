@@ -5,7 +5,7 @@
 
 use std::collections::BTreeMap;
 
-use typesafe_rs::{Question, TypeSafeClient};
+use typesafe_api::{Question, TypeSafeClient};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

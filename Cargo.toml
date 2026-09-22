@@ -1,5 +1,5 @@
 [package]
-name = "typesafe-rs"
+name = "typesafe-api"
 version = "0.1.0"
 edition = "2021"
 description = "Unofficial Rust client for the TypeSafe System One API"
