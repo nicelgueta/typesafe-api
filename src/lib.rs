@@ -5,9 +5,9 @@
 //!
 //! ```no_run
 //! use std::collections::BTreeMap;
-//! use typesafe_rs::{Question, TypeSafeClient};
+//! use typesafe_api::{Question, TypeSafeClient};
 //!
-//! # async fn run() -> Result<(), typesafe_rs::Error> {
+//! # async fn run() -> Result<(), typesafe_api::Error> {
 //! let client = TypeSafeClient::from_env()?;
 //!
 //! let mut questions = BTreeMap::new();
