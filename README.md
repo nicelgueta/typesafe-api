@@ -8,9 +8,8 @@ parsing.
 
 ## Install
 
-```toml
-[dependencies]
-typesafe-api = "0.0.1"
+```bash
+cargo add typesafe-api
 ```
 
 ## Usage
@@ -18,17 +17,15 @@ typesafe-api = "0.0.1"
 Set `TYPESAFE_API_KEY` in your environment, then:
 
 ```rust,no_run
-use std::collections::BTreeMap;
 use typesafe_api::{Question, TypeSafeClient};
 
 # async fn run() -> Result<(), typesafe_api::Error> {
 let client = TypeSafeClient::from_env()?;
 
-let mut questions = BTreeMap::new();
-questions.insert(
+let questions = vec![(
     "is_urgent".to_string(),
     Question::noul("Does this message convey urgency?"),
-);
+)];
 
 let response = client
     .system_one(
@@ -38,7 +35,7 @@ let response = client
     )
     .await?;
 
-println!("{:?}", response.answers["is_urgent"].as_noul());
+println!("{:?}", response.get("is_urgent").unwrap().as_noul());
 # Ok(())
 # }
 ```

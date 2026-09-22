@@ -1,6 +1,6 @@
+use crate::serde_map;
 use serde::Serialize;
 use serde_json::Value;
-use std::collections::BTreeMap;
 
 /// `instructions` (and some `criteria` entries) accept a plain string, a
 /// structured object, or an array. `Text` covers the common string case;
@@ -54,7 +54,8 @@ pub enum Question {
     /// option to a rubric description (`None` when it needs no detail).
     Choice {
         instructions: Text,
-        criteria: BTreeMap<String, Option<Text>>,
+        #[serde(with = "serde_map")]
+        criteria: Vec<(String, Option<Text>)>,
     },
     /// Rates the state along an ordered rubric (2 to 10 levels).
     Score {

@@ -1,4 +1,3 @@
-use std::collections::BTreeMap;
 use std::env;
 use std::time::Duration;
 
@@ -9,6 +8,7 @@ use serde_json::Value;
 use crate::answer::{ModelsResponse, SystemOneResponse};
 use crate::error::Error;
 use crate::question::Question;
+use crate::serde_map;
 
 const DEFAULT_BASE_URL: &str = "https://api.typesafe.ai/v1";
 const ENV_API_KEY: &str = "TYPESAFE_API_KEY";
@@ -100,7 +100,7 @@ impl TypeSafeClient {
         &self,
         state: impl Serialize,
         model: impl Into<String>,
-        questions: BTreeMap<String, Question>,
+        questions: Vec<(String, Question)>,
     ) -> Result<SystemOneResponse, Error> {
         let body = SystemOneRequest {
             state: serde_json::to_value(state).map_err(Error::Decode)?,
@@ -176,5 +176,6 @@ fn to_error(status: StatusCode, body: String) -> Error {
 struct SystemOneRequest {
     state: Value,
     model: String,
-    questions: BTreeMap<String, Question>,
+    #[serde(with = "serde_map")]
+    questions: Vec<(String, Question)>,
 }

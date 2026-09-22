@@ -1,5 +1,5 @@
+use crate::serde_map;
 use serde::Deserialize;
-use std::collections::BTreeMap;
 
 /// A typed answer returned under the same id as its question.
 #[derive(Debug, Clone, Deserialize)]
@@ -10,15 +10,18 @@ pub enum Answer {
     /// The selected option, the full distribution, and a confidence score.
     Choice {
         choice: String,
-        probabilities: BTreeMap<String, f64>,
+        #[serde(with = "serde_map")]
+        probabilities: Vec<(String, f64)>,
         confidence: f64,
     },
     /// A probability-weighted position across the ordered levels; can fall
     /// between two of them.
     Score {
         score: f64,
-        legend: BTreeMap<String, String>,
-        probabilities: BTreeMap<String, f64>,
+        #[serde(with = "serde_map")]
+        legend: Vec<(String, String)>,
+        #[serde(with = "serde_map")]
+        probabilities: Vec<(String, f64)>,
         confidence: f64,
     },
 }
@@ -66,8 +69,16 @@ pub struct Usage {
 pub struct SystemOneResponse {
     /// The versioned model ID that actually answered (e.g. `jev-1.13.0`).
     pub model: String,
-    pub answers: BTreeMap<String, Answer>,
+    #[serde(with = "serde_map")]
+    pub answers: Vec<(String, Answer)>,
     pub usage: Usage,
+}
+
+impl SystemOneResponse {
+    /// The answer for the given question id, if present.
+    pub fn get(&self, id: &str) -> Option<&Answer> {
+        self.answers.iter().find(|(k, _)| k == id).map(|(_, v)| v)
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]

@@ -4,17 +4,15 @@
 //! back typed [`Answer`]s your code can act on directly, with no text parsing.
 //!
 //! ```no_run
-//! use std::collections::BTreeMap;
 //! use typesafe_api::{Question, TypeSafeClient};
 //!
 //! # async fn run() -> Result<(), typesafe_api::Error> {
 //! let client = TypeSafeClient::from_env()?;
 //!
-//! let mut questions = BTreeMap::new();
-//! questions.insert(
+//! let questions = vec![(
 //!     "is_urgent".to_string(),
 //!     Question::noul("Does this message convey urgency?"),
-//! );
+//! )];
 //!
 //! let response = client
 //!     .system_one(
@@ -24,7 +22,7 @@
 //!     )
 //!     .await?;
 //!
-//! println!("{:?}", response.answers["is_urgent"].as_noul());
+//! println!("{:?}", response.get("is_urgent").unwrap().as_noul());
 //! # Ok(())
 //! # }
 //! ```
@@ -33,6 +31,7 @@ mod answer;
 mod client;
 mod error;
 mod question;
+mod serde_map;
 
 pub use answer::{Answer, ModelCard, ModelsResponse, SystemOneResponse, Usage};
 pub use client::{RetryPolicy, TypeSafeClient};
